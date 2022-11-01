@@ -2,6 +2,7 @@ import copy
 import random
 import numpy as np
 
+
 ### Node Object ###
 class Node():
     def __init__(self, parent, node, path, unvisited_nodes, cost):
@@ -19,24 +20,21 @@ class Node():
         self.expanded = {}
 
     def calculate_score(self, C=1):
-        self.score = self.estimate + C * (np.log(self.parent.num_of_visit) / self.num_of_visit)**0.5
+        self.score = self.estimate + C * (np.log(self.parent.num_of_visit) / self.num_of_visit) ** 0.5
 
 
-
-class MCTS():
+class MCTS:
 
     def __init__(self, network):
         self.num_of_node = network.num_of_node
         self.graph = network.graph
         self.root = Node(None, 'root', [], list(self.graph.nodes), 0)
 
-
     def select(self, node):
-        if node.policy == None:
+        if node.policy is None:
             return node
         else:
             return self.select(node.policy)
-
 
     def expand(self, node):
         new_node = node.expandables.pop()
@@ -50,7 +48,6 @@ class MCTS():
         new_node_object = Node(node, new_node, new_path, new_unvisited_nodes, new_cost)
         node.expanded[new_node] = new_node_object
         return new_node_object
-
 
     def backpropagate(self, node):
 
@@ -78,7 +75,6 @@ class MCTS():
             # keep going until root node
             self.backpropagate(node.parent)
 
-
     def calculate_path_edges(self, path):
         path_edges = []
         cost = 0
@@ -93,7 +89,6 @@ class MCTS():
                                  self.graph.edges[path_edges[-1][1], path_edges[0][1]]]))
         cost += path_edges[-1][2]['weight']
         return path_edges, cost
-
 
     def run(self, num_of_expand, num_of_simulate, C):
         while True:
@@ -112,12 +107,10 @@ class MCTS():
                 new_node.estimate = sum(costs) / num_of_simulate
                 new_node.calculate_score()
 
-
             # back up the estimate, calculate score, and update policy
             self.backpropagate(current_node)
 
         return self.calculate_path_edges(current_node.path)
-
 
 
 class RandomMCTS(MCTS):
@@ -125,9 +118,7 @@ class RandomMCTS(MCTS):
     def __init__(self, network):
         MCTS.__init__(self, network)
 
-
     def simulate(self, node):
-
         # setup
         unvisited_nodes = copy.deepcopy(node.unvisited_nodes)
         random.shuffle(unvisited_nodes)
@@ -145,13 +136,11 @@ class RandomMCTS(MCTS):
         return cost
 
 
-
 class GreedyMCTS(MCTS):
 
     def __init__(self, network, prob_greedy):
         MCTS.__init__(self, network)
         self.prob_greedy = prob_greedy
-
 
     def simulate(self, node):
 
@@ -167,7 +156,7 @@ class GreedyMCTS(MCTS):
                 edges = []
                 for n in unvisited_nodes:
                     edges.append(tuple([current_node, n, self.graph.edges[current_node, n]]))
-                edges = sorted(edges, key = lambda x: x[2]['weight'], reverse=False)
+                edges = sorted(edges, key=lambda x: x[2]['weight'], reverse=False)
                 unvisited_nodes.remove(edges[0][1])
                 cost += edges[0][2]['weight']
                 current_node = edges[0][1]

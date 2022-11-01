@@ -14,7 +14,7 @@ def tour_searcher():
     problem_id = 3  # 1: swiss; 2:a280(c); 3:berlin(c); 4:ch130(c); 5:brg180; 6: ulysses22(c)
     coordinates, distance_matrix, Optimal_cost, no_loc = distance_matrix_frm_tsplib(problem_id)
 
-    search_method = 5
+    search_method = 2
     search_method_name = ''
     best_solution = []
     best_search_idx = 0
@@ -69,7 +69,7 @@ def tsp_bf(distance_matrix):
 
 def tsp_shc(distance_matrix):
     # Stochastic Hill Climbing - Parameters
-    parameters = {'iterations': 10,
+    parameters = {'iterations': 20,
                   'verbose': True
                   }
 
@@ -82,7 +82,7 @@ def tsp_shc(distance_matrix):
 def tsp_sa(distance_matrix):
     # simulated annealing - Parameters
     parameters = {'initial_temperature': 1.0,
-                  'temperature_iterations': 5,
+                  'temperature_iterations': 20,
                   'final_temperature': 0.8,
                   'alpha': 0.9,
                   'verbose': True
