@@ -13,6 +13,7 @@ B. 執行本程式需先安裝的PYPI套件:
   5. plotly
   6. numba
   7. matplotlib
+
 C. Reference fot GA for TSP Problem: 
    http://www.inf.tu-dresden.de/content/institutes/ki/cl/study/summer14/pssai/slides/GA_for_TSP.pdf
 
