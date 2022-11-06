@@ -24,7 +24,7 @@ class Network():
         nodes = nodes.reshape(self.num_of_node, 2)
         self.positions = {key: tuple(node) for key, node in enumerate(nodes)}
 
-        # setup the graph
+        # set up the graph
         self.graph = nx.Graph()
         self.graph.add_nodes_from([i for i in range(self.num_of_node)])
 
