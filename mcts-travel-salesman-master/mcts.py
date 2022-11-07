@@ -3,8 +3,8 @@ import random
 import numpy as np
 
 
-### Node Object ###
-class Node():
+# ## Node Object ## #
+class Node:
     def __init__(self, parent, node, path, unvisited_nodes, cost):
         self.parent = parent
         self.node = node
@@ -19,8 +19,8 @@ class Node():
         random.shuffle(self.expandables)
         self.expanded = {}
 
-    def calculate_score(self, C=1):
-        self.score = self.estimate + C * (np.log(self.parent.num_of_visit) / self.num_of_visit) ** 0.5
+    def calculate_score(self, c=1):
+        self.score = self.estimate + c * (np.log(self.parent.num_of_visit) / self.num_of_visit) ** 0.5
 
 
 class MCTS:
@@ -36,21 +36,20 @@ class MCTS:
         else:
             return self.select(node.policy)
 
-    def expand(self, node):
-        new_node = node.expandables.pop()
-        new_path = copy.deepcopy(node.path)
-        new_path.append(new_node)
+    def expand(self, node):     # expand a new node and record it in its parent node
+        new_node = node.expandables.pop()   # select the last node in expandable nodes list to expand
+        new_path = copy.deepcopy(node.path)     #
+        new_path.append(new_node)               # establish the new path to the new expanded node
         new_unvisited_nodes = copy.deepcopy(node.unvisited_nodes)
-        new_unvisited_nodes.remove(new_node)
+        new_unvisited_nodes.remove(new_node)    # remove the expanded new node from the unvisited nodes list
         new_cost = copy.deepcopy(node.cost)
         if node.node != 'root':
-            new_cost += self.graph.edges[node.node, new_node]['weight']
-        new_node_object = Node(node, new_node, new_path, new_unvisited_nodes, new_cost)
-        node.expanded[new_node] = new_node_object
+            new_cost += self.graph.edges[node.node, new_node]['weight']     # add cost resulted from the newly expanded node
+        new_node_object = Node(node, new_node, new_path, new_unvisited_nodes, new_cost) # creat a object for the new node
+        node.expanded[new_node] = new_node_object   # add the expanded new node object to the parent node it from
         return new_node_object
 
     def backpropagate(self, node):
-
         # decide policy for this node
         scores = []
         for key, n in node.expanded.items():
@@ -60,10 +59,9 @@ class MCTS:
                 scores.append([key, n.score])
         scores = np.array(scores)
         node.score = sum(scores[:, 1]) / len(scores)
-        node.policy = node.expanded[scores[np.argmin(scores[:, 1])][0]]
+        node.policy = node.expanded[scores[np.argmin(scores[:, 1])][0]]     # set the expanded node with mini score as the best node for expansion
 
         if node.node != 'root':
-
             # evaluate how good this node is as a child
             estimates = []
             for key, n in node.expanded.items():
@@ -90,7 +88,7 @@ class MCTS:
         cost += path_edges[-1][2]['weight']
         return path_edges, cost
 
-    def run(self, num_of_expand, num_of_simulate, C):
+    def run(self, num_of_expand, num_of_simulate, c):
         while True:
             current_node = self.select(self.root)
 
