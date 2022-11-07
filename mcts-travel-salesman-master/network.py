@@ -29,7 +29,8 @@ class Network():
 
         # setup edge and edge weight
         for i in range(self.num_of_node - 1):
-            d = nodes[i] - nodes[i + 1:, :]
-            weight = (d[:, 0] ** 2 + d[:, 1] ** 2) ** 0.5
+            d = nodes[i] - nodes[(i + 1):]  # distance in [x, y] from node[i] to all the other nodes
+            weight = np.sqrt(d[:, 0] ** 2 + d[:, 1] ** 2)   # distance from node[i] to all the other nodes
+            # the edge between nodes [i, i+j] and the edge weight
             weighted_edges = [(i, i + j, weight[j - 1]) for j in range(1, self.num_of_node - i)]
             self.graph.add_weighted_edges_from(weighted_edges)
