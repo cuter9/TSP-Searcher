@@ -10,7 +10,7 @@ import networkx as nx
 # |- num_of_node: number of nodes in the network
 # └- side_length: length of the 2-d square to place nodes on  
 
-class Network():
+class Network:
 
     def __init__(self, num_of_node, side_length):
         self.num_of_node = num_of_node
