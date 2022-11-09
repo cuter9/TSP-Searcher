@@ -82,13 +82,13 @@ def update_solution(distance_matrix, guess):
     idx = [i, j, k, L]
     idx.sort()
     i, j, k, L = idx
-    A = cl[0][:i + 1] + cl[0][i + 1:j + 1]
-    B = cl[0][j + 1:k + 1]
-    b = list(reversed(B))
-    C = cl[0][k + 1:L + 1]
-    c = list(reversed(C))
-    D = cl[0][L + 1:]
-    d = list(reversed(D))
+    A = cl[0][:i + 1] + cl[0][i + 1:j + 1]  # A section : 0 --> i --> j
+    B = cl[0][j + 1:k + 1]      # B section
+    b = list(reversed(B))       # reverse of B section
+    C = cl[0][k + 1:L + 1]      # C section
+    c = list(reversed(C))       # reverse of C section
+    D = cl[0][L + 1:]           # D section
+    d = list(reversed(D))       # reverse of D section
     trial = [
         # 4-opt: Sequential
         [A + b + c + d], [A + C + B + d], [A + C + b + d], [A + c + B + d], [A + D + B + c],
