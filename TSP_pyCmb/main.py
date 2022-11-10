@@ -1,6 +1,7 @@
 # Required Libraries
 from pyCombinatorial_rev.algorithm import brute_force_analysis, stochastic_hill_climbing
 from pyCombinatorial_rev.algorithm import genetic_algorithm, tabu_search, simulated_annealing_tsp
+from pyCombinatorial_rev.algorithm import montecarlo_tree_search
 from pyCombinatorial_rev.utils import graphs, util
 from load_tsp_data import *
 
@@ -14,7 +15,7 @@ def tour_searcher():
     problem_id = 3  # 1: swiss; 2:a280(c); 3:berlin(c); 4:ch130(c); 5:brg180; 6: ulysses22(c)
     coordinates, distance_matrix, Optimal_cost, no_loc = distance_matrix_frm_tsplib(problem_id)
 
-    search_method = 4
+    search_method = 6
     search_method_name = ''
     best_solution = []
     best_search_idx = 0
@@ -38,6 +39,10 @@ def tour_searcher():
             case 5:
                 best_solution_n, evolution_profile_n = tsp_ga(distance_matrix)
                 search_method_name = 'Genetic Algorithm'
+            case 6:
+                best_solution_n, evolution_profile_n = tsp_mcts(coordinates, distance_matrix)
+                search_method_name = 'Genetic Algorithm'
+
         end = time.process_time()
         search_time = end - start
         best_solution.append(best_solution_n)
@@ -120,6 +125,21 @@ def tsp_ga(distance_matrix):
 
     # GA - Algorithm
     best_solution, evolution_profile = genetic_algorithm(distance_matrix, **parameters)
+
+    return best_solution, evolution_profile
+
+
+def tsp_mcts(coordinates, distance_matrix):
+    # MCTS - Parameters
+    parameters = {
+        'prob_greedy': 0.2,  # probability of greedy
+        'num_of_expand': 50,
+        'num_of_simulate': 20,
+        'verbose': True
+    }
+
+    # MCTS - Algorithm
+    best_solution, evolution_profile = montecarlo_tree_search(coordinates, distance_matrix, **parameters)
 
     return best_solution, evolution_profile
 

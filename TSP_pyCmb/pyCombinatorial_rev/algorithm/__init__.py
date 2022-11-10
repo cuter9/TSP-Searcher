@@ -1,4 +1,4 @@
-from .aco import ant_colony_optimization 
+from .aco import ant_colony_optimization
 from .bb import branch_and_bound
 from .bf import brute_force_analysis
 from .bhk import bellman_held_karp_exact_algorithm
@@ -18,7 +18,7 @@ from .ins_f import farthest_insertion
 from .ins_n import nearest_insertion
 from .ins_r import random_insertion
 from .ksp import karp_steele_patching
-from .mf import  multifragment_heuristic
+from .mf import multifragment_heuristic
 from .nn import nearest_neighbour
 from .opt_2 import local_search_2_opt
 from .opt_2_5 import local_search_2h_opt
@@ -45,3 +45,4 @@ from .spfc_s import space_filling_curve_s
 from .swp import sweep
 from .tat import tat_algorithm
 from .tbb import truncated_branch_and_bound
+from .mcts import montecarlo_tree_search
