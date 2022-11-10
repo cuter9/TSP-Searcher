@@ -44,7 +44,6 @@ def tour_searcher():
                 best_solution_n = [e[0]+1 for e in edges_n]
                 best_solution_n.append(edges_n[-1][1]+1)
                 best_solution_n = [best_solution_n, cost_n]
-
                 evolution_profile_n = [cost_n]
                 search_method_name = 'Monte Carlo Tree Search'
 
@@ -60,11 +59,9 @@ def tour_searcher():
         evolution_profile_n = [evolution_profile_n, search_time]
         evolution_profile.append(evolution_profile_n)
         # evolution_profile[-1].append(search_time)
-    if search_method != 6:
-        # graphs.plot_evolution(evolution_profile[-1][0], best_solution[-1], Optimal_cost, search_method_name)
+    if search_method != 6:      # MCTS has no convergence plot
         graphs.plot_evolution(evolution_profile, best_solution, Optimal_cost, best_search_idx, search_method_name)
     # graphs.plot_tour(coordinates, city_tour=route, view='browser', size=10)
-    # graphs.plot_tour(coordinates, best_solution[-1], Optimal_cost, search_method_name, view='browser', size=10)
     graphs.plot_tour(coordinates, best_solution[best_search_idx], Optimal_cost, search_method_name, view='browser',
                      size=10)
 
