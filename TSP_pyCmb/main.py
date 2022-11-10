@@ -40,8 +40,10 @@ def tour_searcher():
                 best_solution_n, evolution_profile_n = tsp_ga(distance_matrix)
                 search_method_name = 'Genetic Algorithm'
             case 6:
-                best_solution_n, evolution_profile_n = tsp_mcts(coordinates, distance_matrix)
-                search_method_name = 'Genetic Algorithm'
+                edges_n, cost_n = tsp_mcts(coordinates, distance_matrix)
+                best_solution_n = [[e[0] for e in edges_n], cost_n]
+                evolution_profile_n = [cost_n]
+                search_method_name = 'Monte Carlo Tree Search'
 
         end = time.process_time()
         search_time = end - start
@@ -55,11 +57,12 @@ def tour_searcher():
         evolution_profile_n = [evolution_profile_n, search_time]
         evolution_profile.append(evolution_profile_n)
         # evolution_profile[-1].append(search_time)
-
-    # graphs.plot_evolution(evolution_profile[-1][0], best_solution[-1], Optimal_cost, search_method_name)
-    graphs.plot_evolution(evolution_profile, best_solution, Optimal_cost, best_search_idx, search_method_name)
+    if search_method != 6:
+        # graphs.plot_evolution(evolution_profile[-1][0], best_solution[-1], Optimal_cost, search_method_name)
+        graphs.plot_evolution(evolution_profile, best_solution, Optimal_cost, best_search_idx, search_method_name)
     # graphs.plot_tour(coordinates, city_tour=route, view='browser', size=10)
-    graphs.plot_tour(coordinates, best_solution[-1], Optimal_cost, search_method_name, view='browser', size=10)
+    # graphs.plot_tour(coordinates, best_solution[-1], Optimal_cost, search_method_name, view='browser', size=10)
+    graphs.plot_tour(coordinates, best_solution[best_search_idx], Optimal_cost, search_method_name, view='browser', size=10)
 
     print('Total Distance: ', round(best_solution[-1][1], 2))
     print('Cost_gap: ', best_solution[-1][2])
@@ -133,8 +136,8 @@ def tsp_mcts(coordinates, distance_matrix):
     # MCTS - Parameters
     parameters = {
         'prob_greedy': 0.2,  # probability of greedy
-        'num_of_expand': 50,
-        'num_of_simulate': 20,
+        'num_of_expand': 20,    # 50
+        'num_of_simulate': 20,  # 20
         'verbose': True
     }
 

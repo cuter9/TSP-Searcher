@@ -106,7 +106,7 @@ class MCTS:
                 new_node = self.expand(current_node)
                 costs = []
                 for j in range(num_of_simulate):
-                    costs.append(self.simulate(new_node))   # simulate with rolling policy, RandomMCTS or GreedyMCTS
+                    costs.append(self.simulate(new_node))  # simulate with rolling policy, RandomMCTS or GreedyMCTS
                 new_node.estimate = sum(costs) / num_of_simulate
                 new_node.calculate_score()
 
@@ -206,7 +206,7 @@ class Network:
 
 
 def montecarlo_tree_search(coordinates, distance_matrix,
-                           prob_greedy=0.2, num_of_expand=50, num_of_simulate=20):
+                           prob_greedy=0.2, num_of_expand=50, num_of_simulate=20, verbose=True):
     edges_set = []
     cost_set = []
     run_time_set = []
@@ -222,5 +222,6 @@ def montecarlo_tree_search(coordinates, distance_matrix,
     edges_set.append(edges)
     cost_set.append(cost)
     run_time_set.append(run_time)
-    print("greedy mcts has cost of {:.2f} using {:.4f}s".format(cost, run_time))
-    return
+    if verbose is True:
+        print("greedy mcts has cost of {:.2f} using {:.4f}s".format(cost, run_time))
+    return edges, cost
