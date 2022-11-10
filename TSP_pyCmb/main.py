@@ -4,14 +4,14 @@ from pyCombinatorial_rev.algorithm import genetic_algorithm, tabu_search, simula
 from pyCombinatorial_rev.algorithm import montecarlo_tree_search
 from pyCombinatorial_rev.utils import graphs, util
 from load_tsp_data import *
-
+from utilities import plot_mcts
 import time
 
 
 def tour_searcher():
     # Use a breakpoint in the code line below to debug your script.
 
-    search_times = 3  # times for searching
+    search_times = 2  # times for searching
     problem_id = 3  # 1: swiss; 2:a280(c); 3:berlin(c); 4:ch130(c); 5:brg180; 6: ulysses22(c)
     coordinates, distance_matrix, Optimal_cost, no_loc = distance_matrix_frm_tsplib(problem_id)
 
@@ -41,7 +41,10 @@ def tour_searcher():
                 search_method_name = 'Genetic Algorithm'
             case 6:
                 edges_n, cost_n = tsp_mcts(coordinates, distance_matrix)
-                best_solution_n = [[e[0] for e in edges_n], cost_n]
+                best_solution_n = [e[0]+1 for e in edges_n]
+                best_solution_n.append(edges_n[-1][1]+1)
+                best_solution_n = [best_solution_n, cost_n]
+
                 evolution_profile_n = [cost_n]
                 search_method_name = 'Monte Carlo Tree Search'
 
@@ -62,11 +65,12 @@ def tour_searcher():
         graphs.plot_evolution(evolution_profile, best_solution, Optimal_cost, best_search_idx, search_method_name)
     # graphs.plot_tour(coordinates, city_tour=route, view='browser', size=10)
     # graphs.plot_tour(coordinates, best_solution[-1], Optimal_cost, search_method_name, view='browser', size=10)
-    graphs.plot_tour(coordinates, best_solution[best_search_idx], Optimal_cost, search_method_name, view='browser', size=10)
+    graphs.plot_tour(coordinates, best_solution[best_search_idx], Optimal_cost, search_method_name, view='browser',
+                     size=10)
 
-    print('Total Distance: ', round(best_solution[-1][1], 2))
-    print('Cost_gap: ', best_solution[-1][2])
-    print("執行時間：%f 秒" % evolution_profile[-1][1])
+    print('Total Distance: ', round(best_solution[best_search_idx][1], 2))
+    print('Cost_gap: ', best_solution[best_search_idx][2])
+    print("執行時間：%f 秒" % evolution_profile[best_search_idx][1])
 
 
 def tsp_bf(distance_matrix):
@@ -135,9 +139,10 @@ def tsp_ga(distance_matrix):
 def tsp_mcts(coordinates, distance_matrix):
     # MCTS - Parameters
     parameters = {
+        'roll_policy': 'greedy',     # 'greedy' or 'random'
         'prob_greedy': 0.2,  # probability of greedy
-        'num_of_expand': 20,    # 50
-        'num_of_simulate': 20,  # 20
+        'num_of_expand': 50,  # 50
+        'num_of_simulate': 100,  # 20
         'verbose': True
     }
 

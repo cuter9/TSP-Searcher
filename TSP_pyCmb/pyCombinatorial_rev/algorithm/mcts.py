@@ -205,7 +205,7 @@ class Network:
             self.graph.add_weighted_edges_from(weighted_edges)
 
 
-def montecarlo_tree_search(coordinates, distance_matrix,
+def montecarlo_tree_search(coordinates, distance_matrix, roll_policy='greedy',
                            prob_greedy=0.2, num_of_expand=50, num_of_simulate=20, verbose=True):
     edges_set = []
     cost_set = []
@@ -214,9 +214,16 @@ def montecarlo_tree_search(coordinates, distance_matrix,
     network = Network(coordinates, distance_matrix)
     # mcts 2 - greedy
     start = time.time()
-    greedy_mcts = GreedyMCTS(network, prob_greedy)
-    # run takes (number to expand, number to simulate, and constant C) as input
-    edges, cost = greedy_mcts.run(num_of_expand, num_of_simulate, 100)
+    match roll_policy:
+        case 'greedy':
+            mcts = GreedyMCTS(network, prob_greedy)
+            # run takes (number to expand, number to simulate, and constant C) as input
+            edges, cost = mcts.run(num_of_expand, num_of_simulate, 100)
+        case 'random':
+            mcts = RandomMCTS(network)
+            # run takes (number to expand, number to simulate, and constant C) as input
+            edges, cost = mcts.run(num_of_expand, num_of_simulate, 100)
+
     run_time = time.time() - start
 
     edges_set.append(edges)
