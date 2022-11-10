@@ -14,6 +14,6 @@ B. 執行本程式需先安裝的PYPI套件:
   6. numba
   7. matplotlib
 
-C. Reference of GA for TSP Problem: 
+C. Reference of applying GA for sovling TSP Problem: 
    http://www.inf.tu-dresden.de/content/institutes/ki/cl/study/summer14/pssai/slides/GA_for_TSP.pdf
 
