@@ -95,6 +95,7 @@ class MCTS:     # 1.select --> 2. expand --> 3. simulate --> 4. backpropagate
     # run MCST algorithm starting from root;
     # then select, expand, simulate with rolling policy and finally backpropagate
     def run(self, num_of_expand, num_of_simulate, c):
+
         while True:
             current_node = self.select(self.root)
 

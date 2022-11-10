@@ -132,8 +132,8 @@ def tsp_mcts(coordinates, distance_matrix):
     parameters = {
         'roll_policy': 'greedy',     # 'greedy' or 'random'
         'prob_greedy': 0.4,  # probability of greedy
-        'num_of_expand': 50,  # 50
-        'num_of_simulate': 100,  # 20
+        'num_of_expand': 10,  # 50
+        'num_of_simulate': 10,  # 20
         'verbose': True
     }
 
