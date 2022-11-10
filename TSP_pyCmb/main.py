@@ -40,7 +40,7 @@ def tour_searcher():
                 best_solution_n, evolution_profile_n = tsp_ga(distance_matrix)
                 search_method_name = 'Genetic Algorithm'
             case 6:
-                edges_n, cost_n = tsp_mcts(coordinates, distance_matrix)
+                edges_n, cost_n = tsp_mcts(coordinates, distance_matrix)    # refer to mcts-travel-salesman-master
                 best_solution_n = [e[0]+1 for e in edges_n]
                 best_solution_n.append(edges_n[-1][1]+1)
                 best_solution_n = [best_solution_n, cost_n]
