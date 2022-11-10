@@ -4,7 +4,6 @@ from pyCombinatorial_rev.algorithm import genetic_algorithm, tabu_search, simula
 from pyCombinatorial_rev.algorithm import montecarlo_tree_search
 from pyCombinatorial_rev.utils import graphs, util
 from load_tsp_data import *
-from utilities import plot_mcts
 import time
 
 
