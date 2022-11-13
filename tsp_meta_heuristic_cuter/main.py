@@ -39,9 +39,9 @@ best_sol = []
 data = {}
 
 # set method
-# method = 'ts'  # tabu search
+method = 'ts'  # tabu search
 # method = 'ga'  # genetic algorithm
-method = 'sa'  # simulated annealing
+# method = 'sa'  # simulated annealing
 
 # set mutation method (random perturbation)
 # mut_md = [get_new_sol_swap, get_delta_swap]
@@ -57,7 +57,7 @@ for _ in tqdm(range(num_tests)):
                                            tb_size=20,  # tabu solutions in tb_list
                                            max_tnm=100,  # how many candidates picked in tournament selection
                                            mut_md=mut_md,  # [get_sol, get delta], method of mutation, e.g. swap, 2-opt
-                                           term_count=200  # terminate threshold if best_cost nor change
+                                           term_count=200  # terminate threshold if best_cost not change
                                            )
         case 'ga':
             method_name = 'Genetic Algorithm'

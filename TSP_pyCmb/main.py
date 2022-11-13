@@ -15,7 +15,7 @@ def tour_searcher():
     problem_id = 3  # 1: swiss; 2:a280(c); 3:berlin(c); 4:ch130(c); 5:brg180; 6: ulysses22(c)
     coordinates, distance_matrix, Optimal_cost, no_loc = distance_matrix_frm_tsplib(problem_id)
 
-    search_method = 6
+    search_method = 5
     search_method_name = ''
     best_solution = []
     best_search_idx = 0
@@ -90,10 +90,10 @@ def tsp_shc(distance_matrix):
 
 def tsp_sa(distance_matrix):
     # simulated annealing - Parameters
-    parameters = {'initial_temperature': 1.0,
-                  'temperature_iterations': 20,
-                  'final_temperature': 0.8,
-                  'alpha': 0.9,
+    parameters = {'initial_temperature': 1.0,       # t_0
+                  'temperature_iterations': 20,     # max_tnm
+                  'final_temperature': 0.8,         # t_final
+                  'alpha': 0.9,                     # alpha
                   'verbose': True
                   }
 
@@ -105,8 +105,8 @@ def tsp_sa(distance_matrix):
 def tsp_tabu(distance_matrix):
     # Tabu - Parameters
     parameters = {
-        'tabu_tenure': 5,  # 10: the number of iterations prohibiting move actions
-        'iterations': 10,
+        'tabu_tenure': 5,  # tb_tenure; 10: the number of iterations prohibiting move actions
+        'iterations': 10,  # iter_no
         'verbose': True
     }
     city_tour = util.seed_function(distance_matrix)
@@ -118,12 +118,12 @@ def tsp_tabu(distance_matrix):
 def tsp_ga(distance_matrix):
     # GA - Parameters
     parameters = {
-        'population_size': 10 + 1,  # 10; 20 : the population for breeding, 1: for elite
-        'elite': 1,
-        'crossover_rate': 0.5,  # 0.5
-        'mutation_rate': 0.01,  # 0.1
+        'population_size': 10,  # n_pop; 10; 20 : the population for breeding, 1: for elite
+        'elite': 1,             # elite_no
+        'crossover_rate': 0.5,  # r_cross; 0.5
+        'mutation_rate': 0.01,  # r_mut; 0.1
         'mutation_search': -1,  # 8; -1 : no recursive breading
-        'generations': 5,
+        'generations': 5,       # max_gen_no
         'verbose': True
     }
 
