@@ -25,7 +25,7 @@ class Node:
         self.score = self.estimate + c * (np.log(self.parent.num_of_visit) / self.num_of_visit) ** 0.5
 
 
-class MCTS:
+class MCTS:     # 1.select --> 2. expand --> 3. simulate --> 4. backpropagate
 
     def __init__(self, network):
         self.num_of_node = network.num_of_node
@@ -92,8 +92,10 @@ class MCTS:
         cost += path_edges[-1][2]['weight']
         return path_edges, cost
 
-    # run from root to current and expand, and then simulate with rolling policy
+    # run MCST algorithm starting from root;
+    # then select, expand, simulate with rolling policy and finally backpropagate
     def run(self, num_of_expand, num_of_simulate, c):
+
         while True:
             current_node = self.select(self.root)
 
@@ -101,12 +103,12 @@ class MCTS:
             if len(current_node.path) == self.num_of_node:
                 break
 
-            # expand and simulate
+            # expand and simulate with rolling policy
             for i in range(min(num_of_expand, len(current_node.expandables))):
                 new_node = self.expand(current_node)
                 costs = []
                 for j in range(num_of_simulate):
-                    costs.append(self.simulate(new_node))  # simulate with rolling policy, RandomMCTS or GreedyMCTS
+                    costs.append(self.simulate(new_node))  # can simulate with rolling policy, RandomMCTS or GreedyMCTS
                 new_node.estimate = sum(costs) / num_of_simulate
                 new_node.calculate_score()
 

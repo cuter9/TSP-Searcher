@@ -4,7 +4,6 @@ from pyCombinatorial_rev.algorithm import genetic_algorithm, tabu_search, simula
 from pyCombinatorial_rev.algorithm import montecarlo_tree_search
 from pyCombinatorial_rev.utils import graphs, util
 from load_tsp_data import *
-from utilities import plot_mcts
 import time
 
 
@@ -40,7 +39,7 @@ def tour_searcher():
                 best_solution_n, evolution_profile_n = tsp_ga(distance_matrix)
                 search_method_name = 'Genetic Algorithm'
             case 6:
-                edges_n, cost_n = tsp_mcts(coordinates, distance_matrix)
+                edges_n, cost_n = tsp_mcts(coordinates, distance_matrix)    # refer to mcts-travel-salesman-master
                 best_solution_n = [e[0]+1 for e in edges_n]
                 best_solution_n.append(edges_n[-1][1]+1)
                 best_solution_n = [best_solution_n, cost_n]
@@ -58,15 +57,14 @@ def tour_searcher():
 
         evolution_profile_n = [evolution_profile_n, search_time]
         evolution_profile.append(evolution_profile_n)
-        # evolution_profile[-1].append(search_time)
+
     if search_method != 6:      # MCTS has no convergence plot
         graphs.plot_evolution(evolution_profile, best_solution, Optimal_cost, best_search_idx, search_method_name)
-    # graphs.plot_tour(coordinates, city_tour=route, view='browser', size=10)
     graphs.plot_tour(coordinates, best_solution[best_search_idx], Optimal_cost, search_method_name, view='browser',
                      size=10)
 
-    print('Total Distance: ', round(best_solution[best_search_idx][1], 2))
-    print('Cost_gap: ', best_solution[best_search_idx][2])
+    print('Best Total Distance: ', round(best_solution[best_search_idx][1], 2))
+    print('Best Cost_gap: ', best_solution[best_search_idx][2])
     print("執行時間：%f 秒" % evolution_profile[best_search_idx][1])
 
 
@@ -84,7 +82,6 @@ def tsp_shc(distance_matrix):
 
     city_tour = util.seed_function(distance_matrix)
     best_solution, evolution_profile = stochastic_hill_climbing(distance_matrix, city_tour, **parameters)
-
     return best_solution, evolution_profile
 
 
@@ -98,7 +95,6 @@ def tsp_sa(distance_matrix):
                   }
 
     best_solution, evolution_profile = simulated_annealing_tsp(distance_matrix, **parameters)
-
     return best_solution, evolution_profile
 
 
@@ -111,7 +107,6 @@ def tsp_tabu(distance_matrix):
     }
     city_tour = util.seed_function(distance_matrix)
     best_solution, evolution_profile = tabu_search(distance_matrix, city_tour, **parameters)
-
     return best_solution, evolution_profile
 
 
@@ -129,7 +124,6 @@ def tsp_ga(distance_matrix):
 
     # GA - Algorithm
     best_solution, evolution_profile = genetic_algorithm(distance_matrix, **parameters)
-
     return best_solution, evolution_profile
 
 
@@ -137,15 +131,14 @@ def tsp_mcts(coordinates, distance_matrix):
     # MCTS - Parameters
     parameters = {
         'roll_policy': 'greedy',     # 'greedy' or 'random'
-        'prob_greedy': 0.2,  # probability of greedy
-        'num_of_expand': 50,  # 50
-        'num_of_simulate': 100,  # 20
+        'prob_greedy': 0.4,  # probability of greedy
+        'num_of_expand': 10,  # 50
+        'num_of_simulate': 10,  # 20
         'verbose': True
     }
 
     # MCTS - Algorithm
     best_solution, evolution_profile = montecarlo_tree_search(coordinates, distance_matrix, **parameters)
-
     return best_solution, evolution_profile
 
 
