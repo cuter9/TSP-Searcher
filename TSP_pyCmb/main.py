@@ -14,7 +14,7 @@ def tour_searcher():
     problem_id = 3  # 1: swiss; 2:a280(c); 3:berlin(c); 4:ch130(c); 5:brg180; 6: ulysses22(c)
     coordinates, distance_matrix, Optimal_cost, no_loc = distance_matrix_frm_tsplib(problem_id)
 
-    search_method = 5
+    search_method = 3
     search_method_name = ''
     best_solution = []
     best_search_idx = 0
