@@ -10,12 +10,13 @@ import time
 def tour_searcher():
     # Use a breakpoint in the code line below to debug your script.
 
-    search_times = 2  # times for searching
+    search_times = 10  # times for searching
     problem_id = 3  # 1: swiss; 2:a280(c); 3:berlin(c); 4:ch130(c); 5:brg180; 6: ulysses22(c)
     coordinates, distance_matrix, Optimal_cost, no_loc = distance_matrix_frm_tsplib(problem_id)
 
-    search_method = 3
+    search_method = 4
     search_method_name = ''
+    search_time_sum = 0
     best_solution = []
     best_search_idx = 0
     best_search = float('+inf')
@@ -39,15 +40,16 @@ def tour_searcher():
                 best_solution_n, evolution_profile_n = tsp_ga(distance_matrix)
                 search_method_name = 'Genetic Algorithm'
             case 6:
-                edges_n, cost_n = tsp_mcts(coordinates, distance_matrix)    # refer to mcts-travel-salesman-master
-                best_solution_n = [e[0]+1 for e in edges_n]
-                best_solution_n.append(edges_n[-1][1]+1)
+                edges_n, cost_n = tsp_mcts(coordinates, distance_matrix)  # refer to mcts-travel-salesman-master
+                best_solution_n = [e[0] + 1 for e in edges_n]
+                best_solution_n.append(edges_n[-1][1] + 1)
                 best_solution_n = [best_solution_n, cost_n]
                 evolution_profile_n = [cost_n]
                 search_method_name = 'Monte Carlo Tree Search'
 
         end = time.process_time()
-        search_time = end - start
+        search_time_n = end - start
+        search_time_sum += search_time_n
         best_solution.append(best_solution_n)
         cost_gap_n = round((best_solution[-1][1] / Optimal_cost - 1) * 100, 2)
         best_solution[-1].append(cost_gap_n)
@@ -55,17 +57,19 @@ def tour_searcher():
             best_search = cost_gap_n
             best_search_idx = n
 
-        evolution_profile_n = [evolution_profile_n, search_time]
+        evolution_profile_n = [evolution_profile_n, search_time_n]
         evolution_profile.append(evolution_profile_n)
-
-    if search_method != 6:      # MCTS has no convergence plot
+    search_time_avg = search_time_sum / search_times
+    if search_method != 6:  # MCTS has no convergence plot
         graphs.plot_evolution(evolution_profile, best_solution, Optimal_cost, best_search_idx, search_method_name)
     graphs.plot_tour(coordinates, best_solution[best_search_idx], Optimal_cost, search_method_name, view='browser',
                      size=10)
 
+    print('##### Results #####')
     print('Best Total Distance: ', round(best_solution[best_search_idx][1], 2))
     print('Best Cost_gap: ', best_solution[best_search_idx][2])
-    print("執行時間：%f 秒" % evolution_profile[best_search_idx][1])
+    print("最佳執行時間：%f 秒" % evolution_profile[best_search_idx][1])
+    print("平均執行時間：%f 秒" % search_time_avg)
 
 
 def tsp_bf(distance_matrix):
@@ -87,10 +91,10 @@ def tsp_shc(distance_matrix):
 
 def tsp_sa(distance_matrix):
     # simulated annealing - Parameters
-    parameters = {'initial_temperature': 1.0,       # t_0
-                  'temperature_iterations': 20,     # max_tnm
-                  'final_temperature': 0.8,         # t_final
-                  'alpha': 0.9,                     # alpha
+    parameters = {'initial_temperature': 1.0,  # t_0
+                  'temperature_iterations': 20,  # max_tnm
+                  'final_temperature': 0.1,  # t_final
+                  'alpha': 0.9,  # alpha
                   'verbose': True
                   }
 
@@ -101,8 +105,8 @@ def tsp_sa(distance_matrix):
 def tsp_tabu(distance_matrix):
     # Tabu - Parameters
     parameters = {
-        'tabu_tenure': 5,  # tb_tenure; 10: the number of iterations prohibiting move actions
-        'iterations': 10,  # iter_no
+        'tabu_tenure': 50,  # tb_tenure; 10: the number of iterations prohibiting move actions
+        'iterations': 200,  # iter_no
         'verbose': True
     }
     city_tour = util.seed_function(distance_matrix)
@@ -113,12 +117,12 @@ def tsp_tabu(distance_matrix):
 def tsp_ga(distance_matrix):
     # GA - Parameters
     parameters = {
-        'population_size': 10,  # n_pop; 10; 20 : the population for breeding, 1: for elite
-        'elite': 1,             # elite_no
+        'population_size': 20,  # n_pop; 10; 20 : the population for breeding, 1: for elite
+        'elite': 1,  # elite_no
         'crossover_rate': 0.5,  # r_cross; 0.5
         'mutation_rate': 0.01,  # r_mut; 0.1
         'mutation_search': -1,  # 8; -1 : no recursive breading
-        'generations': 5,       # max_gen_no
+        'generations': 50,  # max_gen_no
         'verbose': True
     }
 
@@ -130,7 +134,7 @@ def tsp_ga(distance_matrix):
 def tsp_mcts(coordinates, distance_matrix):
     # MCTS - Parameters
     parameters = {
-        'roll_policy': 'greedy',     # 'greedy' or 'random'
+        'roll_policy': 'greedy',  # 'greedy' or 'random'
         'prob_greedy': 0.4,  # probability of greedy
         'num_of_expand': 10,  # 50
         'num_of_simulate': 10,  # 20
